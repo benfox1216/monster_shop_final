@@ -1,60 +1,39 @@
 class Merchant::DiscountsController < Merchant::BaseController
   def index
-    @discounts = current_user.merchant.discounts
+    @items = current_user.merchant.items
   end
 
   def new
+    @items = current_user.merchant.items
   end
 
   def create
     merchant = current_user.merchant
-    item = merchant.items.new(item_params)
-    if item.save
-      redirect_to "/merchant/items"
+    discount = merchant.discounts.new(discount_params)
+    if discount.save
+      discount.create_item_discounts(params[:items][:item_ids], params[:amount], params[:num_items])
+      redirect_to "/merchant/discounts"
     else
-      generate_flash(item)
+      generate_flash(discount)
       render :new
     end
   end
 
   def edit
-    @item = Item.find(params[:id])
+    
   end
 
   def update
-    @item = Item.find(params[:id])
-    if @item.update(item_params)
-      redirect_to "/merchant/items"
-    else
-      generate_flash(@item)
-      render :edit
-    end
-  end
 
-  def change_status
-    item = Item.find(params[:id])
-    item.update(active: !item.active)
-    if item.active?
-      flash[:notice] = "#{item.name} is now available for sale"
-    else
-      flash[:notice] = "#{item.name} is no longer for sale"
-    end
-    redirect_to '/merchant/items'
   end
 
   def destroy
-    item = Item.find(params[:id])
-    if item.orders.empty?
-      item.destroy
-    else
-      flash[:notice] = "#{item.name} can not be deleted - it has been ordered!"
-    end
-    redirect_to '/merchant/items'
+
   end
 
   private
 
-  def item_params
-    params.permit(:name, :description, :price, :image, :inventory)
+  def discount_params
+    params.permit(:amount, :num_items)
   end
 end
