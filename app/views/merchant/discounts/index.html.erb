@@ -4,9 +4,9 @@
 <h2>Discounted Items</h2>
 <% @items.each do |item| %>
   <section id="item-<%= item.id %>">
-    <p><%= link_to item.name, "/items/#{item.id}" if item.item_discounts != [] %> </p>
-    <% item.item_discounts.each do |item_discount| %>
-      <p><%= item_discount.amount %>% discount on <%= item_discount.num_items %> or more items</p>
+    <p><%= link_to item.name, "/items/#{item.id}" if item.discounts != [] %> </p>
+    <% item.discounts.each do |discount| %>
+      <p><%= discount.amount %>% discount on <%= discount.num_items %> or more items</p>
     <% end %><br>
   </section>
 <% end %>
