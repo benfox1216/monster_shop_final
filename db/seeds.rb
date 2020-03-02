@@ -20,6 +20,6 @@ item_4 = brian.items.create!(name: 'Hippo', description: "I'm a Hippo!", price: 
 ben = megan.users.create!(name: "Ben Fox", address: "2475 Field St", city: "Lakewood", state: "CO", zip: "80215", email: "benfox1216@gmail.com", password: "password")
 
 #discounts
-discount_1 = megan.discounts.create!(amount: 20, num_items: 5)
-discount_2 = megan.discounts.create!(amount: 25, num_items: 10)
-discount_3 = megan.discounts.create!(amount: 30, num_items: 20)
+discount_1 = megan.discounts.create!(percent_discount: 20, minimum_items: 5)
+discount_2 = megan.discounts.create!(percent_discount: 25, minimum_items: 10)
+discount_3 = megan.discounts.create!(percent_discount: 30, minimum_items: 20)
