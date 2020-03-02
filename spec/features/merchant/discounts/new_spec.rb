@@ -21,38 +21,26 @@ describe "As a merchant employee" do
       expect(current_path).to eq("/merchant/discounts/new")
     end
     
-    it "I can create multiple discounts for multiple items" do
+    it "I can create multiple discounts" do
+      expect(page).to have_content("My Bulk Discounts")
+
       click_link "New Discount"
 
       fill_in :amount, with: 5
-      fill_in :num_items, with: 20
-      expect(page).to have_content("Giant")
-      expect(page).to_not have_content("Hippo")
-      check("Ogre", allow_label_click: true)
+      fill_in :num_items, with: 10
       click_button "Create Discount"
-      
+
       expect(current_path).to eq("/merchant/discounts")
-      expect(page).to have_content("Discounted Items")
+      expect(page).to have_content("5% discount on 10 or more items")
       
       click_link "New Discount"
 
       fill_in :amount, with: 10
       fill_in :num_items, with: 30
-      check("Ogre", allow_label_click: true)
-      check("Giant", allow_label_click: true)
       click_button "Create Discount"
-
-      within "#item-#{@ogre.id}" do
-        expect(page).to have_content("Ogre")
-        expect(page).to have_content("5% discount on 20 or more items")
-        expect(page).to have_content("10% discount on 30 or more items")
-      end
       
-      within "#item-#{@giant.id}" do
-        expect(page).to have_content("Giant")
-        expect(page).to have_content("5% discount on 20 or more items")
-        expect(page).to_not have_content("10% discount on 30 or more items")
-      end
+      expect(page).to have_content("5% discount on 10 or more items")
+      expect(page).to have_content("10% discount on 30 or more items")
     end
 
     it "I cannot create a discount with an incomplete form" do

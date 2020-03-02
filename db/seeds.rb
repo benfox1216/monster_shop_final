@@ -1,5 +1,4 @@
 OrderItem.destroy_all
-ItemDiscount.destroy_all
 Order.destroy_all
 Item.destroy_all
 Discount.destroy_all
@@ -24,8 +23,3 @@ ben = megan.users.create!(name: "Ben Fox", address: "2475 Field St", city: "Lake
 discount_1 = megan.discounts.create!(amount: 20, num_items: 5)
 discount_2 = megan.discounts.create!(amount: 25, num_items: 10)
 discount_3 = megan.discounts.create!(amount: 30, num_items: 20)
-
-#item_discounts
-discount_1.item_discounts.create!(item_id: item_1.id, amount: discount_1.amount, num_items: discount_1.num_items)
-discount_2.item_discounts.create!(item_id: item_1.id, amount: discount_2.amount, num_items: discount_2.num_items)
-discount_2.item_discounts.create!(item_id: item_2.id, amount: discount_2.amount, num_items: discount_2.num_items)

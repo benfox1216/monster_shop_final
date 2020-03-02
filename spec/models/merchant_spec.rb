@@ -8,7 +8,6 @@ RSpec.describe Merchant do
     it {should have_many :users}
     
     it {should have_many :discounts}
-    it {should have_many(:item_discounts).through(:discounts)}
   end
 
   describe 'Validations' do
