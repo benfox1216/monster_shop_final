@@ -1,7 +1,7 @@
 class Discount < ApplicationRecord
   belongs_to :merchant
   
-  validates_presence_of :amount,
-                        :num_items
+  validates_presence_of :percent_discount,
+                        :minimum_items
   
 end

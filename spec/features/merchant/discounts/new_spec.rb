@@ -14,8 +14,8 @@ describe "As a merchant employee" do
       click_link "New Discount"
       expect(current_path).to eq("/merchant/discounts/new")
 
-      fill_in :amount, with: 5
-      fill_in :num_items, with: 10
+      fill_in :percent_discount, with: 5
+      fill_in :minimum_items, with: 10
       click_button "Create Discount"
 
       expect(current_path).to eq("/merchant/discounts")
@@ -23,8 +23,8 @@ describe "As a merchant employee" do
       
       click_link "New Discount"
 
-      fill_in :amount, with: 10
-      fill_in :num_items, with: 30
+      fill_in :percent_discount, with: 10
+      fill_in :minimum_items, with: 30
       click_button "Create Discount"
       
       expect(page).to have_content("5% discount on 10 or more items")
@@ -33,11 +33,11 @@ describe "As a merchant employee" do
 
     it "I cannot create a discount with an incomplete form" do
       click_link "New Discount"
-      fill_in :amount, with: 5
+      fill_in :percent_discount, with: 5
       click_button "Create Discount"
-      save_and_open_page
-      expect(current_path).to eq("/merchant/discounts/new")
-      expect(page).to have_content("description: [\"can't be blank\"]")
+
+      expect(page).to have_content("minimum_items: [\"can't be blank\"]")
+      expect(page).to have_content("New Discount")
     end
   end
 end

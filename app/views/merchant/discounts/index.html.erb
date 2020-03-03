@@ -3,7 +3,11 @@
 
 <% if @discounts != [] %>
   <% @discounts.each do |discount| %>
-    <h3><%= discount.amount %>% discount on <%= discount.num_items %> or more items</h3>
+    <section id="discount-<%= discount.id %>">
+      <h3><%= discount.percent_discount %>% discount on <%= discount.minimum_items %> or more items
+      <%= link_to 'edit', "/merchant/discounts/#{discount.id}/edit" %>
+      <%= link_to 'delete', "/merchant/discounts/#{discount.id}", method: :delete %></h3>
+    </section>
   <% end %>
 <% else %>
   <h3>No discounts have been created</h3>

@@ -15,8 +15,8 @@ describe "As a merchant employee" do
       expect(page).to have_content("My Bulk Discounts")
       expect(page).to have_content("No discounts have been created")
       
-      discount_1 = @megan.discounts.create!(amount: 20, num_items: 5)
-      discount_2 = @megan.discounts.create!(amount: 25, num_items: 10)
+      discount_1 = @megan.discounts.create!(percent_discount: 20, minimum_items: 5)
+      discount_2 = @megan.discounts.create!(percent_discount: 25, minimum_items: 10)
       
       visit "/merchant/discounts"
       

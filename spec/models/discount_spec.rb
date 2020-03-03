@@ -6,7 +6,7 @@ describe Discount do
   end
   
   describe 'Validations' do
-    it {should validate_presence_of :amount}
-    it {should validate_presence_of :num_items}
+    it {should validate_presence_of :percent_discount}
+    it {should validate_presence_of :minimum_items}
   end
 end
