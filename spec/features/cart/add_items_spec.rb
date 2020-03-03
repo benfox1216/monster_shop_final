@@ -32,5 +32,9 @@ RSpec.describe "Add Items to Cart" do
       expect(page).to have_content("#{@giant.name} has been added to your cart!")
       expect(page).to have_content("Cart: 2")
     end
+    
+    it "" do
+      
+    end
   end
 end
