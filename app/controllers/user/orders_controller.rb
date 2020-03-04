@@ -13,14 +13,10 @@ class User::OrdersController < ApplicationController
     order = current_user.orders.new
     order.save
       cart.items.each do |item|
-        price = item.price
-        quantity = cart.contents[item.id.to_s]
-        discounted_price = cart.largest_discount(item.merchant.discounts, price, quantity)
-        
         order.order_items.create({
           item: item,
           quantity: cart.count_of(item.id),
-          price: discounted_price
+          price: cart.price(item)
           })
       end
     session.delete(:cart)

@@ -12,6 +12,9 @@ RSpec.describe Cart do
         @ogre.id.to_s => 1,
         @giant.id.to_s => 2
         })
+        
+      @megan.discounts.create!(percent_discount: 10, minimum_items: 3)
+      @megan.discounts.create!(percent_discount: 20, minimum_items: 6)
     end
 
     it '.contents' do
@@ -64,21 +67,24 @@ RSpec.describe Cart do
       expect(@cart.count_of(@giant.id)).to eq(1)
     end
     
-    it '#largest_discount()' do
-      @megan.discounts.create!(percent_discount: 10, minimum_items: 2)
-      @megan.discounts.create!(percent_discount: 20, minimum_items: 4)
-      @cart.contents[@ogre.id.to_s] = 2
+    it '#price()' do
+      expect(@cart.price(@ogre)).to eq(20.0)
       
-      price = @ogre.price
-      quantity = @cart.contents[@ogre.id.to_s]
-      discounts_available = @ogre.merchant.discounts
+      @cart.contents[@ogre.id.to_s] = 3
+      expect(@cart.price(@ogre)).to eq(18.0)
       
-      expect(@cart.largest_discount(discounts_available, price, quantity)).to eq(18.0)
+      @cart.contents[@ogre.id.to_s] = 6
+      expect(@cart.price(@ogre)).to eq(16.0)
+    end
+    
+    it '#available_discounts()' do
+      expect(@cart.available_discounts(@ogre)).to eq([])
       
-      @cart.contents[@ogre.id.to_s] = 4
-      quantity = @cart.contents[@ogre.id.to_s]
+      @cart.contents[@ogre.id.to_s] = 3
+      expect(@cart.available_discounts(@ogre)).to eq([18.0])
       
-      expect(@cart.largest_discount(discounts_available, price, quantity)).to eq(16.0)
+      @cart.contents[@ogre.id.to_s] = 6
+      expect(@cart.available_discounts(@ogre)).to eq([18.0, 16.0])
     end
   end
 end
