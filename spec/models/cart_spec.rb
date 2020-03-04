@@ -63,5 +63,22 @@ RSpec.describe Cart do
 
       expect(@cart.count_of(@giant.id)).to eq(1)
     end
+    
+    it '#largest_discount()' do
+      @megan.discounts.create!(percent_discount: 10, minimum_items: 2)
+      @megan.discounts.create!(percent_discount: 20, minimum_items: 4)
+      @cart.contents[@ogre.id.to_s] = 2
+      
+      price = @ogre.price
+      quantity = @cart.contents[@ogre.id.to_s]
+      discounts_available = @ogre.merchant.discounts
+      
+      expect(@cart.largest_discount(discounts_available, price, quantity)).to eq(18.0)
+      
+      @cart.contents[@ogre.id.to_s] = 4
+      quantity = @cart.contents[@ogre.id.to_s]
+      
+      expect(@cart.largest_discount(discounts_available, price, quantity)).to eq(16.0)
+    end
   end
 end

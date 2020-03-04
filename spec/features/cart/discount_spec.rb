@@ -39,7 +39,7 @@ describe "As a visitor" do
       expect(page).to have_content("Total: $200.00")
     end
     
-    it "and item from a store without discounts doesn't have discount applied" do
+    it "an item from a store without discounts doesn't have discount applied" do
       visit item_path(@giant)
       click_button 'Add to Cart'
       
