@@ -5,6 +5,8 @@ describe "As a visitor" do
     before :each do
       @megan = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218)
       @giant = @megan.items.create!(name: 'Giant', description: "I'm a Giant!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 10 )
+      @ogre = @megan.items.create!(name: 'Ogre', description: "I'm an Ogre!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 10 )
+
       @megan.discounts.create!(percent_discount: 10, minimum_items: 2)
       @megan.discounts.create!(percent_discount: 20, minimum_items: 4)
       
@@ -37,6 +39,55 @@ describe "As a visitor" do
       end
       
       expect(page).to have_content("Total: $200.00")
+    end
+    
+    it "multiple items for one merchant apply discounts per item only" do
+      visit item_path(@giant)
+      click_button 'Add to Cart'
+      
+      visit item_path(@ogre)
+      click_button 'Add to Cart'
+      click_link 'Cart: 2'
+      
+      expect(current_path).to eq('/cart')
+      
+      within "#item-#{@giant.id}" do
+        expect(page).to have_content("Subtotal: $50.00")
+        
+        click_button "More of This!"
+        expect(page).to have_content("Subtotal: $90.00")
+        
+        click_button "More of This!"
+        expect(page).to have_content("Subtotal: $135.00")
+        
+        click_button "More of This!"
+        expect(page).to have_content("Subtotal: $160.00")
+        
+        click_button "More of This!"
+        expect(page).to have_content("Quantity: 5")
+        expect(page).to have_content("Subtotal: $200.00")
+      end
+      
+      within "#item-#{@ogre.id}" do
+        expect(page).to have_content("Subtotal: $50.00")
+      end
+      
+      expect(page).to have_content("Total: $250.00")
+      
+      within "#item-#{@ogre.id}" do
+        click_button "More of This!"
+        expect(page).to have_content("Subtotal: $90.00")
+      end
+      
+      expect(page).to have_content("Total: $290.00")
+      
+      within "#item-#{@ogre.id}" do
+        click_button "More of This!"
+        click_button "More of This!"
+        expect(page).to have_content("Subtotal: $160.00")
+      end
+      
+      expect(page).to have_content("Total: $360.00")
     end
     
     it "an item from a store without discounts doesn't have discount applied" do
