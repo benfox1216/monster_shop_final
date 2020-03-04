@@ -22,15 +22,19 @@ describe "As a visitor" do
       expect(current_path).to eq('/cart')
       
       within "#item-#{@giant.id}" do
+        expect(page).to have_content("Discount Applied: 0% off")
         expect(page).to have_content("Subtotal: $50.00")
         
         click_button "More of This!"
+        expect(page).to have_content("Discount Applied: 10% off")
         expect(page).to have_content("Subtotal: $90.00")
         
         click_button "More of This!"
+        expect(page).to have_content("Discount Applied: 10% off")
         expect(page).to have_content("Subtotal: $135.00")
         
         click_button "More of This!"
+        expect(page).to have_content("Discount Applied: 20% off")
         expect(page).to have_content("Subtotal: $160.00")
         
         click_button "More of This!"

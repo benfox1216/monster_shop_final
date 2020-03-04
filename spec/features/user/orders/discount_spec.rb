@@ -44,7 +44,9 @@ RSpec.describe 'As a user' do
       expect(current_path).to eq('/cart')
       
       within "#item-#{@ogre.id}" do
+        expect(page).to have_content("Discount Applied: 0% off")
         click_button "More of This!"
+        expect(page).to have_content("Discount Applied: 10% off")
         expect(page).to have_content("Subtotal: $90.00")
       end
       
