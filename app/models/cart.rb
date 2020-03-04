@@ -42,22 +42,14 @@ class Cart
 
   def subtotal_of(item_id)
     item = Item.find(item_id)
-    count_of(item.id) * price(item)
+    count_of(item.id) * item.price * (100 - discount(item))/100
   end
   
-  def price(item)
-    if available_discounts(item) != []
-      available_discounts(item).min
-    else
-      item.price
-    end
+  def discount(item)
+    item.merchant.discounts.best_discount(count_of(item.id)) || 0
   end
   
-  def available_discounts(item)
-    item.merchant.discounts.map do |discount|
-      if count_of(item.id) >= discount.minimum_items
-        item.price - (item.price * discount.percent_discount / 100.0)
-      end
-    end.compact
+  def discounted_price(item)
+    subtotal_of(item.id) / count_of(item.id)
   end
 end

@@ -54,6 +54,12 @@ RSpec.describe Cart do
     it '.subtotal_of()' do
       expect(@cart.subtotal_of(@ogre.id)).to eq(20)
       expect(@cart.subtotal_of(@giant.id)).to eq(100)
+      
+      @cart.contents[@ogre.id.to_s] = 3
+      expect(@cart.subtotal_of(@ogre.id)).to eq(54.0)
+      
+      @cart.contents[@ogre.id.to_s] = 6
+      expect(@cart.subtotal_of(@ogre.id)).to eq(96.0)
     end
 
     it '.limit_reached?()' do
@@ -67,24 +73,24 @@ RSpec.describe Cart do
       expect(@cart.count_of(@giant.id)).to eq(1)
     end
     
-    it '#price()' do
-      expect(@cart.price(@ogre)).to eq(20.0)
+    it "#discount()" do
+      expect(@cart.discount(@giant)).to eq(0)
       
-      @cart.contents[@ogre.id.to_s] = 3
-      expect(@cart.price(@ogre)).to eq(18.0)
+      @cart.contents[@giant.id.to_s] = 3
+      expect(@cart.discount(@giant)).to eq(10.0)
       
-      @cart.contents[@ogre.id.to_s] = 6
-      expect(@cart.price(@ogre)).to eq(16.0)
+      @cart.contents[@giant.id.to_s] = 6
+      expect(@cart.discount(@giant)).to eq(20.0)
     end
     
-    it '#available_discounts()' do
-      expect(@cart.available_discounts(@ogre)).to eq([])
+    it "#discounted_price" do
+      expect(@cart.discounted_price(@giant)).to eq(50.0)
       
-      @cart.contents[@ogre.id.to_s] = 3
-      expect(@cart.available_discounts(@ogre)).to eq([18.0])
+      @cart.contents[@giant.id.to_s] = 3
+      expect(@cart.discounted_price(@giant)).to eq(45.0)
       
-      @cart.contents[@ogre.id.to_s] = 6
-      expect(@cart.available_discounts(@ogre)).to eq([18.0, 16.0])
+      @cart.contents[@giant.id.to_s] = 6
+      expect(@cart.discounted_price(@giant)).to eq(40.0)
     end
   end
 end
